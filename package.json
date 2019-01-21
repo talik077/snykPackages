@@ -27,7 +27,7 @@
     "lint": "npm run lint:js && npm run lint:sass",
     "lint:js": "jshint",
     "lint:sass": "stylelint ./src/**/*.scss",
-    "start": "npm run start-dev",
+    "start": "concurrently \"npm run start-dev\" \"node app.js\"",
     "start-dev": "webpack-dev-server --config=configs/webpack/dev",
     "start-prod": "npm run build && node app.js",
     "test": "jest --watch --coverage --config=configs/jest.json"
@@ -72,6 +72,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
     "cors": "^2.8.4",
     "dotenv-safe": "^6.1.0",
     "graph-data-structure": "^1.8.0",

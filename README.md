@@ -8,8 +8,7 @@
 ## Usage
 **Development**
 
-`npm start`
-`node express`
+`npm run start`
 
 * Build app continously (HMR enabled)
 * App served @ `http://localhost:8080` 
