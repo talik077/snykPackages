@@ -78,8 +78,7 @@ class App extends React.Component {
         return (
             <div className="container">
                 <div className="column-left">
-                    <img className="app-logo" onClick={() =>location.reload()}
-                         src="https://res.cloudinary.com/snyk/image/upload/v1533761770/logo-1_wtob68.svg" />
+                    <img className="app-logo" src="/src/assets/img/snykdog.svg" onClick={() => location.reload()} />
                     <input className='search-input' onChange={this.onNameChange}
                            placeholder={`Package Name (${this.packageName})`} />
                     <input className='search-input' onChange={this.onVersionChange}
