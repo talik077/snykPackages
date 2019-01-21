@@ -3,20 +3,17 @@ const neo4j = require('neo4j-driver').v1;
 const driver = neo4j.driver('bolt://localhost', neo4j.auth.basic('neo4j', 'snyk'));
 const session = driver.session();
 
-const getPackageTree = async (packageName) => {
-    return await Packages.aggregate([
-        { $match: { package: packageName } },
-        {
-            $graphLookup: {
-                from: 'packages',
-                startWith: '$package',
-                connectFromField: 'package',
-                connectToField: 'parent',
-                as: 'children',
-                depthField: "level"
-            }
-        }
-    ])
+const getPackageTree = async (rootKey) => {
+    return await session.run(`MATCH path = (p:Package {name:'${rootKey}'})-[children:HAS_DEPENDENCY*]->(:Package)
+    WITH collect(path) as paths
+    CALL apoc.convert.toTree(paths) yield value
+    RETURN value;`);
+};
+
+const getPackagesFlattened = async (rootKey) => {
+    return await session.run(`MATCH p = (:Package {name: '${rootKey}'})-[r*0..]->(x)
+    WITH collect(DISTINCT x) as nodes, [r in collect(distinct last(r)) | {from: startNode(r), to: endNode(r) }] as rels
+    RETURN nodes, rels`);
 };
 
 const updateGraph = async (nodes, links) => {
@@ -62,5 +59,6 @@ const isExists = async (packageName, packageVersion) => {
 module.exports = {
     isExists,
     updateGraph,
+    getPackagesFlattened,
     getPackageTree
 };
