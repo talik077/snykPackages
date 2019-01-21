@@ -42,7 +42,6 @@ class App extends React.Component {
         this.setState({ isSearching: true }, this.getPackageData);
     }
 
-
     getTree() {
         const { graph } = this.state;
         return (
@@ -65,8 +64,6 @@ class App extends React.Component {
 
                         }
                     }}
-                    transitionDuration={500}
-                    zoomable={true}
                     zoom={0.8}
                 />
             </div>

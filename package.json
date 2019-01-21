@@ -73,6 +73,7 @@
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
+    "dotenv-safe": "^6.1.0",
     "graph-data-structure": "^1.8.0",
     "md5": "^2.2.1",
     "neo4j-driver": "^1.7.2",
