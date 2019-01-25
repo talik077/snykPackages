@@ -9,7 +9,7 @@ const scanRegistry = async (packageName, packageVersion) => {
         const curr = queue.shift();
         const { name, version } = curr;
         const isExists = await graphDB.isExists(name, version);
-        if (!isExists) {
+        if (!isExists && !isScanned(nodes, curr)) {
             nodes.push({ name, version });
             try {
                 let data = await fetchData(curr.name, curr.version);
@@ -25,6 +25,11 @@ const scanRegistry = async (packageName, packageVersion) => {
         }
     }
     return [nodes, links, root];
+};
+
+const isScanned = (nodes, curr) => {
+    const node = nodes.find((elem) => elem.name === curr.name && elem.version === curr.version);
+    return typeof node !== 'undefined';
 };
 
 const _addLinks = (links, node, neighbors) => {
@@ -60,7 +65,7 @@ const getNestedTree = (flatArray) => {
     const relationships = flatArray.records[0].get('rels');
     const nodes = flatArray.records[0].get('nodes');
 
-    let map = {}, tree = [];
+    let map = {}, tree = [], isVisited = {};
     nodes.forEach(({ properties }, index) => {
         const { name, ...other } = properties;
         map[name] = index; // initialize the map
@@ -70,6 +75,10 @@ const getNestedTree = (flatArray) => {
     relationships.forEach(({ from, to }) => {
         const parentName = from.properties.name;
         const childName = to.properties.name;
+        if (isVisited[childName]) {
+            return;
+        }
+        isVisited[parentName] = true;
         tree[map[parentName]].children.push(tree[map[childName]]);
     });
 
