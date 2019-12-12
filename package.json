@@ -30,7 +30,9 @@
     "start": "concurrently \"npm run start-dev\" \"node app.js\"",
     "start-dev": "webpack-dev-server --config=configs/webpack/dev",
     "start-prod": "npm run build && node app.js",
-    "test": "jest --watch --coverage --config=configs/jest.json"
+    "test": "jest --watch --coverage --config=configs/jest.json",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -80,7 +82,9 @@
     "neo4j-driver": "^1.7.2",
     "react-d3-tree": "^1.12.2",
     "react-spinners": "^0.5.1",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "snyk": "^1.258.2"
   },
-  "postcss": {}
+  "postcss": {},
+  "snyk": true
 }
